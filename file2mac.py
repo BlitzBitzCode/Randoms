@@ -18,13 +18,20 @@ def display_algorithms():
     sys.exit()
 
 def get_message_digest(algo, target):
-    msgdigest = hashlib.new(algo)
-    f = open(target, 'rb')
-    data = bytes(f.read())
-    f.close()
-    msgdigest.update(data)
-    print(msgdigest.hexdigest())
-    sys.exit()
+    try:
+        msgdigest = hashlib.new(algo)
+        f = open(target, 'rb')
+        data = bytes(f.read())
+        f.close()
+        msgdigest.update(data)
+        hash = msgdigest.hexdigest()
+        print("File: " + target)
+        print("Hash: " + hash)
+    except OSError as osEx:
+        print("File:    \'" + target + "\' not found")
+        print("Message: " + osEx)
+    finally:
+        sys.exit()
 
 if __name__ == "__main__":
     params = sys.argv
@@ -41,8 +48,6 @@ if __name__ == "__main__":
         else:
             sys.exit()
     elif len(params) == 3:
-        print("run hashing...")
-        print("please wait...")
         get_message_digest(sys.argv[1], sys.argv[2])
     else:
         pass
